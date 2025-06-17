@@ -1,0 +1,59 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator fornext {
+  provider = "prisma-client-js"
+  output   = "../client/node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  username  String   @unique
+  blocks    Block[]  @relation("UserBlocks")
+  createdAt DateTime @default(now())
+}
+
+model Block {
+  id            String       @id @default(uuid())
+  creator       User         @relation("UserBlocks", fields: [creatorId], references: [id])
+  creatorId     String
+  eventName     String
+  blockHash     String       @unique
+  signature     String
+  previousHash  String?      
+  transactions  Transaction[]
+  messages      Message[]
+  finalized     Boolean      @default(false)
+  createdAt     DateTime     @default(now())
+  finalizedAt   DateTime?
+
+  @@index([previousHash])
+  @@unique([previousHash])
+}
+
+model Transaction {
+  id        String   @id @default(uuid())
+  blockId   String
+  messageId String
+  block     Block    @relation(fields: [blockId], references: [id])
+  messages   Message[]
+
+  @@unique([blockId, messageId])
+}
+
+model Message {
+  id        String   @id
+  text      String
+  signature String
+  createdAt DateTime @default(now())
+  blockId   String?
+  transactionId String?
+  block     Block?   @relation(fields: [blockId], references: [id])
+  transaction Transaction? @relation(fields: [transactionId], references: [id])
+}
