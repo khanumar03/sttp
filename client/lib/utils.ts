@@ -6,4 +6,4 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export const socket: SocketIOClient.Socket = io("http://localhost:3001")
+export const socket: SocketIOClient.Socket = io(process.env.SERVER_URL as string)
