@@ -99,7 +99,7 @@ Environment variables are crucial for configuring the application. Template file
     # If using local container:
     DATABASE_URL="postgresql://your_db_user:your_db_password@localhost:5432/your_database_name?schema=public"
     # If using a cloud platform, replace localhost:5432 with your cloud provider's host and port:
-    # DATABASE_URL="postgresql://your_db_user:your_db_password@your_cloud_host:your_cloud_port/your_database_name?schema=public"
+    DATABASE_URL="postgresql://your_db_user:your_db_password@your_cloud_host:your_cloud_port/your_database_name?\schema=public"
     ```
 
 2.  **Create Client Environment File (`.env`):**
