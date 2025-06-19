@@ -13,8 +13,7 @@ import {
 } from "@/components/ui/card";
 import { User, ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { db } from "@/lib/db";
-import { createUser } from "@/actions/user";
+import { create } from "@/actions/user";
 
 export default function JoinPage() {
   const [username, setUsername] = useState("");
@@ -26,7 +25,7 @@ export default function JoinPage() {
 
     setIsJoining(true);
 
-    const response = await createUser(username);
+    const response = await create(username);
 
     if (response.error) {
       setIsJoining(false);
@@ -35,7 +34,7 @@ export default function JoinPage() {
     }
     setIsJoining(false);
     
-    router.push(`/authorize?username=${username.trim()}`);
+    router.push(`/`);
   };
 
   return (

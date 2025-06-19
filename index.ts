@@ -51,7 +51,7 @@ io.on("connection", (socket: Socket) => {
 
     socket.emit("block:created", {
       count: io.sockets.adapter.rooms.get(name)?.size || 0,
-      id: isCreated.id
+      id: isCreated.id,
     });
   });
 
@@ -59,23 +59,21 @@ io.on("connection", (socket: Socket) => {
     const { name, username } = data;
 
     socket.join(name);
-    socket
-      .to(name)
-      .emit("block:user:joined", {
-        count: io.sockets.adapter.rooms.get(name)?.size || 0,
-        username,
-      });
+    socket.to(name).emit("block:user:joined", {
+      count: io.sockets.adapter.rooms.get(name)?.size || 0,
+      username,
+    });
   });
 
   socket.on("block:transaction", (data) => {
-    socket.to(data.name).emit("block:msg", { id: data.name, transaction: data.transaction });
-  })
+    socket
+      .to(data.name)
+      .emit("block:msg", { id: data.name, transaction: data.transaction });
+  });
 
   socket.on("user:join", (data) => {
-    socket.join(data.name)
-    console.log("join");
-    
-  })
+    socket.join(data.name);
+  });
 
   socket.on("disconnect", () => {
     console.log("A user disconnected");

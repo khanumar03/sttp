@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, MouseEventHandler, KeyboardEventHandler, KeyboardEvent, MouseEvent } from "react";
 import { AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -34,35 +34,33 @@ export default function BlockPage() {
 
     fetchBlock();
   }, [blockId]);
-
-  console.log(block);
   
 
   useEffect(() => {
-    socket.emit("user:join", { name: "dev3" });
-
+    socket.emit("user:join", { name: "todo" });
   }, []);
 
   useEffect(() => {
     socket.on("block:user:joined", (data) => {
-      alert(`${data.username} has joined the block`);
+      // alert(`${data.username} has joined the block`);
     });
 
     socket.on("block:msg", (data) => {
-      alert(`New transaction in block ${data.id}: ${data.transaction}`);
+      // alert(`New transaction in block ${data.id}: ${data.transaction}`);
     });
 
     return () => {
       socket.off("block:user:joined");
       socket.off("block:msg");
     };
-  });
+  },[]);
 
-  //   useEffect(() => {
-  //     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-  //   }, [])
+    useEffect(() => {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+    }, [message])
 
-  const sendMessage = () => {
+  const sendMessage = (e: KeyboardEvent<HTMLInputElement> | MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     if (!message.trim()) return;
     console.log(block?.eventName);
     
@@ -152,10 +150,10 @@ export default function BlockPage() {
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     className="flex-1 bg-white/10 border-white/20 text-white placeholder:text-gray-400"
-                    onKeyPress={(e) => e.key === "Enter" && sendMessage()}
+                    onKeyPress={(e) => e.key === "Enter" && sendMessage(e)}
                   />
                   <Button
-                    onClick={sendMessage}
+                    onClick={(e) => sendMessage()}
                     disabled={!message.trim()}
                     className={`bg-gradient-to-r bg-purple-500 hover:opacity-90`}
                   >
