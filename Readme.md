@@ -119,7 +119,7 @@ Environment variables are crucial for configuring the application. Template file
 
     
     ```
-    *Make sure `NEXT_PUBLIC_BACKEND_URL` matches the `PORT` your backend is running on.*
+    *For additional examples of environment variables, please refer to the .env.template file.*
 
 ### Prisma Client Generation and Migrations
 
